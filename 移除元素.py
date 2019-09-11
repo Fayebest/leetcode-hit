@@ -16,4 +16,5 @@ class Solution(object):
                 nums[i] = nums[end]
                 count = count + 1
                 end = end - 1
+            i = i + 1
         return len(nums) - count
