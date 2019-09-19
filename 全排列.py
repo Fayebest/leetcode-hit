@@ -1,12 +1,13 @@
 class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
+    def permute(self, nums):
         ans =[]
         self.backtrack(nums,ans,0)
         return ans
 
     def backtrack(self,nums,ans,sta):
         if sta == len(nums):
-            ans.append(nums[:])
+            ans.append(nums)
+            print(nums)
         for i in range(sta,len(nums)):
             temp = nums[sta]
             nums[sta] = nums[i]
@@ -15,3 +16,7 @@ class Solution:
             temp = nums[sta]
             nums[sta] = nums[i]
             nums[i] = temp
+
+a = Solution()
+ans = a.permute([1,2,3])
+print(ans)
