@@ -42,6 +42,7 @@ class Solution:
         if cells[x][y].value == value:
             return True
         if cells[x][y].possibilenum == 1:
+            print("----->error1")
             return False
         cells[x][y].value = value
         cells[x][y].constrain = [1] *10
@@ -49,10 +50,12 @@ class Solution:
         cells[x][y].possiblenum = 1
         for i in range(0,9):
             if (i != y and not self.toConstrain(x,i,cells,value)) or (i !=x and not self.toConstrain(i,y,cells,value)):
+                print("----->error2")
                 return False
         for i in range(x//3*3,x//3*3+3):
             for j in range(y//3*3,y//3*3+3):
                 if (i != x and j!=y) and not self.toConstrain(i,j,cells,value):
+                    print("------>error3")
                     return False
         return True
 
@@ -60,6 +63,7 @@ class Solution:
         if cells[x][y].constrain[value]:
             return True
         if cells[x][y].value == value:
+            print("--->error4")
             return False
         cells[x][y].constrain[value] = 1
         cells[x][y].possibilenum -= 1
