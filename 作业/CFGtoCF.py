@@ -13,17 +13,23 @@ class CFGtoCF:
     def __init__(self):
         self.Var = {}
         self.loadCFG()
-        for i in self.Var:
-            print(self.Var[i])
+        # for i in self.Var:
+        #     print(self.Var[i])
         self.deleteE()
-        for i in self.Var:
-            print(self.Var[i])
+        # for i in self.Var:
+        #     print(self.Var[i])
         self.removeUnit()
-        for i in self.Var:
-            print(self.Var[i])
+        # for i in self.Var:
+        #      print(self.Var[i])
         self.introVar()
         for i in self.Var:
-            print(i + "  :  " + str(self.Var[i]))
+            print(i+"->",end="")
+            for j in range(len(self.Var[i])):
+                print(self.Var[i][j],end="")
+                if j != len(self.Var[i])-1:
+                    print("|",end="")
+            print()
+
 
     def loadCFG(self):      #
         fo = open("CFG.txt",'r')
@@ -125,16 +131,30 @@ class CFGtoCF:
         varcount = 0
         tercount = 0
 
-        for key in list(self.Var.keys()):              #找出长度大于2的产生式 用新变量替代
+        for key in list(self.Var.keys()):  # 找出长度大于2的产生式 用新变量替代
             for exp in range(len(self.Var[key])):
                 if len(self.Var[key][exp]) > 2:
-                    if self.Var[key][exp][1:] not in tempvardict.keys():
-                        newvar = "#V"+str(varcount)+"#"
-                        varcount += 1
-                        self.Var[newvar] = []
-                        self.Var[newvar].append(self.Var[key][exp][1:])
-                        tempvardict[self.Var[key][exp][1:]] = newvar
-                    self.Var[key][exp] = self.Var[key][exp][0] + tempvardict[self.Var[key][exp][1:]]
+                    tempstring = self.Var[key][exp]
+                    for num in range(1,len(tempstring) - 1):
+                       if tempstring[num:] not in tempvardict.keys():
+                            newvar = "#V" + str(varcount) + "#"
+                            varcount += 1
+                            tempvar = "#V" + str(varcount) + "#"
+                            self.Var[newvar] = []
+                            if num == len(tempstring) - 2:
+                                self.Var[newvar].append(str(tempstring[num:]))
+                            else:
+                                self.Var[newvar].append(str(tempstring[num])+tempvar)
+                            tempvardict[tempstring[num:]] = newvar
+                            if num == 1:
+                                self.Var[key][exp] = tempstring[num-1] + tempvardict[tempstring[num:]]
+                       else:
+                            if num == 1:
+                                self.Var[key][exp] = tempstring[num-1] + tempvardict[tempstring[num:]]
+                            else:
+                                self.Var[key][exp] = tempstring[num - 1] + tempvardict[tempstring[num:]]
+                            break
+
 
 
         for key in list(self.Var):                                #替换终结符
